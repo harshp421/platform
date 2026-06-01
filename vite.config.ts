@@ -8,13 +8,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5174,
-    proxy: {
-      // Proxy API calls to the backend in dev so the browser sees same-origin.
-      '/api': {
-        target: process.env.VITE_API_TARGET ?? 'http://localhost:3000',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
+    // proxy: {
+    //   // Proxy API calls to the backend in dev so the browser sees same-origin.
+    //   '/api': {
+    //     target: process.env.VITE_API_TARGET ?? 'http://localhost:3000',
+    //     changeOrigin: true,
+    //     rewrite: (path) => path.replace(/^\/api/, ''),
+    //   },
+    // },
   },
 });
