@@ -17,7 +17,23 @@ import type {
   VerifyInput,
 } from './types.ts';
 
-const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? '/api';
+// Backend base URL — same approach as the farmer panel. Set VITE_API_TARGET to
+// the backend origin (e.g. https://canopy-backend.onrender.com) before building;
+// it's inlined at BUILD time, not read at runtime. Normalized so a trailing slash
+// or a stray `/api` suffix doesn't produce a broken path like `//auth/login`.
+function resolveBase(): string {
+  const env = import.meta.env;
+  let base =
+    (env.VITE_API_TARGET as string | undefined)?.trim() || 'http://localhost:3000/api';
+  base = base.replace(/\/+$/, ''); // drop trailing slash(es)
+  // For an absolute backend origin, routes live at the root — drop a `/api` suffix.
+  if (/^https?:\/\//i.test(base)) {
+    base = base.replace(/\/api$/, '');
+  }
+  return base;
+}
+
+const BASE = resolveBase();
 
 const TOKEN_KEY = 'canopy.platform.token';
 
